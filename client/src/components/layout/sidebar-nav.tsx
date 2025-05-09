@@ -142,7 +142,7 @@ export function SidebarNav({ className }: SidebarNavProps) {
 
   const adminRoutes = [
     { icon: <UserCheck size={20} />, label: "Manage Users", to: "/admin/users" },
-    { icon: <Grid3X3 size={20} />, label: "Manage Courses", to: "/admin/courses" },
+    { icon: <Grid3X3 size={20} />, label: "Manage Courses", to: "/dashboard/manage-courses" },
     { icon: <Calendar size={20} />, label: "All Bookings", to: "/admin/bookings" },
     { icon: <Settings size={20} />, label: "Settings", to: "/admin/settings" },
   ];
