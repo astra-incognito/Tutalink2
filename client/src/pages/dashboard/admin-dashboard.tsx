@@ -450,10 +450,10 @@ export default function AdminDashboard() {
             </Card>
             <Card className="shadow-md border-emerald-200">
               <CardContent className="flex items-center gap-4 py-6">
-                <BarChart className="h-8 w-8 text-emerald-600" />
+                <Star className="h-8 w-8 text-emerald-600" />
                 <div>
                   <div className="text-2xl font-bold">${adminEarnings}</div>
-                  <div className="text-sm text-gray-500">Admin Earnings</div>
+                  <div className="text-sm text-gray-500">Revenue</div>
                 </div>
               </CardContent>
             </Card>
