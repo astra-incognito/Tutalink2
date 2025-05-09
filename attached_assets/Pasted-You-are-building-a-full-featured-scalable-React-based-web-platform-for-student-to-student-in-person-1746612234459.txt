@@ -1,0 +1,119 @@
+You are building a full-featured, scalable React-based web platform for student-to-student in-person tutorial bookings. Students can discover and book top-performing peers for physical tutorial sessions on campus.
+
+This project is for a startup MVP and will be expanded later with real-time database and payments. Focus on a responsive, interactive, and animated UI using TailwindCSS and Framer Motion. Use mock data or localStorage where backend isn't implemented yet. The app name is TutaLink 
+
+🔧 Stack:
+
+React (preferably Vite setup)
+
+Tailwind CSS for styling
+
+Framer Motion for page and component animations
+
+react-router-dom for navigation
+
+(Optional: Firebase or localStorage for auth and real-time updates)
+
+📦 Core Features
+
+User Roles & Authentication
+
+Signup with role selection: Tutor or Learner
+
+Login system using local state or Firebase auth
+
+New users are not active by default — require admin approval
+
+Admin logs in using default credentials:
+
+Username: admin123
+
+Password: password123
+
+Auth state is persistent and role-based (Learner, Tutor, Admin)
+
+Admin Panel
+
+View pending signups and approve/reject users
+
+View and manage all bookings
+
+Manage tutor profiles (edit/delete)
+
+View platform usage analytics (mock)
+
+Learner Features
+
+Discover tutors by course, department, year, or rating
+
+View tutor profiles with availability, location, and reviews
+
+Book in-person sessions (select date, time, location)
+
+Leave reviews after session
+
+View own booking history and upcoming sessions
+
+Tutor Features
+
+Dashboard to manage profile, availability, and booking requests
+
+Respond to bookings (accept/reject)
+
+Edit own profile, course expertise, and availability
+
+View learner reviews and ratings
+
+Shared Features
+
+Profile page with editable fields (bio, courses, location)
+
+Animated transitions, button interactions, and page loaders
+
+Responsive design for mobile and desktop
+
+Notification system (mocked for now)
+
+🗂️ Pages Required
+
+/ → Landing page (CTA + Features + Testimonials)
+
+/login, /signup → Auth pages with role selection
+
+/dashboard → Role-based dashboard (Tutor, Learner, Admin)
+
+/tutors → List of tutors with filters/search
+
+/profile/:id → View tutor profile with booking form
+
+/my-profile → Edit your own profile
+
+/bookings → View/manage bookings
+
+/admin → Admin dashboard (only accessible to default admin)
+
+/reviews → Review submission page after sessions
+
+🌍 Real-Time & Full-Time Behavior
+
+Keep app always updated using localStorage or Firebase real-time updates
+
+Maintain login state after refresh
+
+Store booking and user profile data persistently
+
+Simulate real-time changes with useEffect or subscriptions (if Firebase is used)
+
+🧑‍💻 Development Notes
+
+Prioritize smooth user experience with animations (Framer Motion)
+
+Design with scalability in mind — clean, modular codebase
+
+Use mock data for booking and user state if backend isn't ready
+
+Provide reusable components like TutorCard, BookingForm, ReviewCard, Sidebar, etc.
+
+All users must be approved by admin before accessing dashboard
+
+Please scaffold the project with these requirements and start implementing the core structure, beginning with authentication and user role handling.
