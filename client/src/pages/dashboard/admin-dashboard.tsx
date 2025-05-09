@@ -270,6 +270,7 @@ export default function AdminDashboard() {
   const totalBookings = allBookings?.length || 0;
   const completedBookings = allBookings?.filter(b => b.status === "completed").length || 0;
   const pendingBookings = allBookings?.filter(b => b.status === "pending").length || 0;
+  const adminEarnings = (totalBookings * 50 * 0.10).toFixed(2);
 
   // Edit user form
   const editForm = useForm({
@@ -444,6 +445,15 @@ export default function AdminDashboard() {
                 <div>
                   <div className="text-2xl font-bold">{pendingBookings}</div>
                   <div className="text-sm text-gray-500">Pending Bookings</div>
+                </div>
+              </CardContent>
+            </Card>
+            <Card className="shadow-md border-emerald-200">
+              <CardContent className="flex items-center gap-4 py-6">
+                <BarChart className="h-8 w-8 text-emerald-600" />
+                <div>
+                  <div className="text-2xl font-bold">${adminEarnings}</div>
+                  <div className="text-sm text-gray-500">Admin Earnings</div>
                 </div>
               </CardContent>
             </Card>
