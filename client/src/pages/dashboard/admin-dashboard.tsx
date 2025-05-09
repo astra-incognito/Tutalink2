@@ -1,3 +1,4 @@
+import React from "react";
 import { useState } from "react";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { motion } from "framer-motion";
@@ -41,6 +42,7 @@ import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, D
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
+import { format } from "date-fns";
 
 interface PendingUser extends Omit<User, "password"> {}
 interface BookingData extends Booking {
@@ -83,6 +85,9 @@ export default function AdminDashboard() {
   const [currentUser, setCurrentUser] = useState<Partial<User> | null>(null);
   const [page, setPage] = useState(1);
   const usersPerPage = 10;
+  const [dateFilter, setDateFilter] = useState("");
+  const [tutorFilter, setTutorFilter] = useState("");
+  const [learnerFilter, setLearnerFilter] = useState("");
 
   // Redirect if not admin
   if (user?.role !== UserRole.ADMIN) {
@@ -177,21 +182,59 @@ export default function AdminDashboard() {
     },
   });
 
-  // Filter users based on search query
-  const filteredUsers = allUsers?.filter((user) => {
+  // Unique tutors and learners for dropdowns
+  const tutorOptions = allBookings ? Array.from(new Set(allBookings.map(b => b.tutor.fullName))) : [];
+  const learnerOptions = allBookings ? Array.from(new Set(allBookings.map(b => b.learner.fullName))) : [];
+
+  // Admin booking actions
+  const approveBookingMutation = useMutation({
+    mutationFn: async (bookingId: number) => {
+      const res = await apiRequest("PATCH", `/api/admin/bookings/${bookingId}/status`, { status: "accepted" });
+      return await res.json();
+    },
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["admin", "all-bookings"] }),
+  });
+  const disapproveBookingMutation = useMutation({
+    mutationFn: async ({ bookingId, reason }: { bookingId: number; reason: string }) => {
+      const res = await apiRequest("PATCH", `/api/admin/bookings/${bookingId}/status`, { status: "rejected", notes: reason });
+      return await res.json();
+    },
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["admin", "all-bookings"] }),
+  });
+  const cancelBookingMutation = useMutation({
+    mutationFn: async ({ bookingId, reason }: { bookingId: number; reason: string }) => {
+      const res = await apiRequest("PATCH", `/api/admin/bookings/${bookingId}/status`, { status: "cancelled", notes: reason });
+      return await res.json();
+    },
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["admin", "all-bookings"] }),
+  });
+  const rescheduleBookingMutation = useMutation({
+    mutationFn: async ({ bookingId, newDate, newStart, newEnd }: { bookingId: number; newDate: string; newStart: string; newEnd: string }) => {
+      const res = await apiRequest("PATCH", `/api/admin/bookings/${bookingId}/reschedule`, { date: newDate, startTime: newStart, endTime: newEnd });
+      return await res.json();
+    },
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["admin", "all-bookings"] }),
+  });
+
+  // Filter bookings
+  const filteredBookings = allBookings?.filter(booking => {
     const matchesQuery =
       searchQuery === "" ||
-      user.fullName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      user.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      user.username.toLowerCase().includes(searchQuery.toLowerCase());
-
+      booking.tutor.fullName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      booking.learner.fullName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      booking.course.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      booking.course.code.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      booking.location.toLowerCase().includes(searchQuery.toLowerCase());
     const matchesStatus =
-      statusFilter === "all" ||
-      (statusFilter === "active" && user.isActive) ||
-      (statusFilter === "inactive" && !user.isActive);
-
-    return matchesQuery && matchesStatus;
-  });
+      statusFilter === "all" || booking.status === statusFilter;
+    const matchesDate =
+      !dateFilter || format(new Date(booking.date), "yyyy-MM-dd") === dateFilter;
+    const matchesTutor =
+      !tutorFilter || booking.tutor.fullName === tutorFilter;
+    const matchesLearner =
+      !learnerFilter || booking.learner.fullName === learnerFilter;
+    return matchesQuery && matchesStatus && matchesDate && matchesTutor && matchesLearner;
+  }) || [];
 
   // Pagination logic
   const paginatedUsers = filteredUsers?.slice((page - 1) * usersPerPage, page * usersPerPage) || [];
@@ -640,25 +683,53 @@ export default function AdminDashboard() {
                       </CardDescription>
                     </CardHeader>
                     <CardContent>
-                      <div className="flex flex-col sm:flex-row gap-4 mb-6">
+                      <div className="flex flex-col md:flex-row gap-4 mb-6">
                         <div className="relative flex-1">
                           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
                           <Input
-                            type="text"
+                            type="search"
                             placeholder="Search by tutor, learner, or course..."
                             className="pl-10"
+                            value={searchQuery}
+                            onChange={e => setSearchQuery(e.target.value)}
                           />
                         </div>
-                        <Select defaultValue="all">
+                        <input
+                          type="date"
+                          className="border rounded p-2 w-[160px]"
+                          value={dateFilter}
+                          onChange={e => setDateFilter(e.target.value)}
+                          placeholder="Date"
+                        />
+                        <Select value={tutorFilter} onValueChange={setTutorFilter}>
                           <SelectTrigger className="w-[180px]">
+                            <SelectValue placeholder="Filter by tutor" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="">All Tutors</SelectItem>
+                            {tutorOptions.map(t => <SelectItem key={t} value={t}>{t}</SelectItem>)}
+                          </SelectContent>
+                        </Select>
+                        <Select value={learnerFilter} onValueChange={setLearnerFilter}>
+                          <SelectTrigger className="w-[180px]">
+                            <SelectValue placeholder="Filter by learner" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="">All Learners</SelectItem>
+                            {learnerOptions.map(l => <SelectItem key={l} value={l}>{l}</SelectItem>)}
+                          </SelectContent>
+                        </Select>
+                        <Select value={statusFilter} onValueChange={setStatusFilter}>
+                          <SelectTrigger className="w-[160px]">
                             <SelectValue placeholder="Filter by status" />
                           </SelectTrigger>
                           <SelectContent>
-                            <SelectItem value="all">All Bookings</SelectItem>
+                            <SelectItem value="all">All Statuses</SelectItem>
                             <SelectItem value="pending">Pending</SelectItem>
                             <SelectItem value="accepted">Accepted</SelectItem>
                             <SelectItem value="rejected">Rejected</SelectItem>
                             <SelectItem value="completed">Completed</SelectItem>
+                            <SelectItem value="cancelled">Cancelled</SelectItem>
                           </SelectContent>
                         </Select>
                       </div>
@@ -667,9 +738,9 @@ export default function AdminDashboard() {
                         <div className="flex justify-center p-6">
                           <Loader2 className="h-8 w-8 animate-spin text-primary" />
                         </div>
-                      ) : allBookings && allBookings.length > 0 ? (
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                          {allBookings.map((booking) => (
+                      ) : filteredBookings.length > 0 ? (
+                        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+                          {filteredBookings.map((booking) => (
                             <BookingCard
                               key={booking.id}
                               id={booking.id}
@@ -682,6 +753,12 @@ export default function AdminDashboard() {
                               location={booking.location}
                               status={booking.status as any}
                               notes={booking.notes || ""}
+                              fee={booking.fee}
+                              isAdmin={true}
+                              onApprove={id => approveBookingMutation.mutate(id)}
+                              onDisapprove={(id, reason) => disapproveBookingMutation.mutate({ bookingId: id, reason })}
+                              onCancel={(id, reason) => cancelBookingMutation.mutate({ bookingId: id, reason })}
+                              onReschedule={(id, newDate, newStart, newEnd) => rescheduleBookingMutation.mutate({ bookingId: id, newDate, newStart, newEnd })}
                             />
                           ))}
                         </div>

@@ -59,10 +59,15 @@ interface BookingCardProps {
   status: "pending" | "accepted" | "rejected" | "completed";
   notes?: string;
   isTutor?: boolean;
+  fee?: number;
+  isAdmin?: boolean;
   onAccept?: (id: number) => void;
   onReject?: (id: number, reason: string) => void;
   onCancel?: (id: number, reason: string) => void;
   onComplete?: (id: number) => void;
+  onApprove?: (id: number) => void;
+  onDisapprove?: (id: number, reason: string) => void;
+  onReschedule?: (id: number, newDate: string, newStart: string, newEnd: string) => void;
 }
 
 export function BookingCard({
@@ -80,12 +85,23 @@ export function BookingCard({
   onAccept,
   onReject,
   onCancel,
-  onComplete
+  onComplete,
+  fee,
+  isAdmin = false,
+  onApprove,
+  onDisapprove,
+  onReschedule
 }: BookingCardProps) {
   const [rejectDialogOpen, setRejectDialogOpen] = useState(false);
   const [cancelDialogOpen, setCancelDialogOpen] = useState(false);
   const [rejectReason, setRejectReason] = useState("");
   const [cancelReason, setCancelReason] = useState("");
+  const [disapproveDialogOpen, setDisapproveDialogOpen] = useState(false);
+  const [rescheduleDialogOpen, setRescheduleDialogOpen] = useState(false);
+  const [disapproveReason, setDisapproveReason] = useState("");
+  const [rescheduleDate, setRescheduleDate] = useState(date);
+  const [rescheduleStart, setRescheduleStart] = useState(startTime);
+  const [rescheduleEnd, setRescheduleEnd] = useState(endTime);
   
   // Format date with proper date formatting
   const formattedDate = new Date(date).toLocaleDateString('en-US', {
@@ -227,6 +243,12 @@ export function BookingCard({
               <MapPin className="mr-2 h-4 w-4 text-gray-400" />
               <span>{location}</span>
             </div>
+            {fee !== undefined && (
+              <div className="flex items-center text-sm text-gray-600">
+                <span className="font-semibold mr-2">Fee:</span>
+                <span>${fee.toFixed(2)}</span>
+              </div>
+            )}
           </div>
           
           {notes && (
@@ -368,6 +390,98 @@ export function BookingCard({
                   View Details
                 </Button>
               </Link>
+            </div>
+          )}
+          
+          {isAdmin && (
+            <div className="flex flex-col gap-2 w-full">
+              {status === "pending" && (
+                <div className="flex gap-2">
+                  <Button className="flex-1" onClick={() => onApprove && onApprove(id)}>
+                    <CheckCircle className="mr-2 h-4 w-4" />
+                    Approve
+                  </Button>
+                  <Dialog open={disapproveDialogOpen} onOpenChange={setDisapproveDialogOpen}>
+                    <DialogTrigger asChild>
+                      <Button variant="outline" className="flex-1">
+                        <XCircle className="mr-2 h-4 w-4" />
+                        Disapprove
+                      </Button>
+                    </DialogTrigger>
+                    <DialogContent>
+                      <DialogHeader>
+                        <DialogTitle>Disapprove Booking</DialogTitle>
+                        <DialogDescription>Provide a reason for disapproval.</DialogDescription>
+                      </DialogHeader>
+                      <Textarea
+                        placeholder="Reason for disapproval..."
+                        value={disapproveReason}
+                        onChange={e => setDisapproveReason(e.target.value)}
+                        className="min-h-[100px]"
+                      />
+                      <DialogFooter className="mt-4">
+                        <Button variant="outline" onClick={() => setDisapproveDialogOpen(false)}>Cancel</Button>
+                        <Button variant="destructive" onClick={() => { onDisapprove && onDisapprove(id, disapproveReason); setDisapproveDialogOpen(false); setDisapproveReason(""); }} disabled={!disapproveReason.trim()}>
+                          Disapprove
+                        </Button>
+                      </DialogFooter>
+                    </DialogContent>
+                  </Dialog>
+                </div>
+              )}
+              <div className="flex gap-2">
+                <Dialog open={cancelDialogOpen} onOpenChange={setCancelDialogOpen}>
+                  <DialogTrigger asChild>
+                    <Button variant="outline" className="flex-1">
+                      <XCircle className="mr-2 h-4 w-4" />
+                      Cancel
+                    </Button>
+                  </DialogTrigger>
+                  <DialogContent>
+                    <DialogHeader>
+                      <DialogTitle>Cancel Booking</DialogTitle>
+                      <DialogDescription>Provide a reason for cancellation.</DialogDescription>
+                    </DialogHeader>
+                    <Textarea
+                      placeholder="Reason for cancellation..."
+                      value={cancelReason}
+                      onChange={e => setCancelReason(e.target.value)}
+                      className="min-h-[100px]"
+                    />
+                    <DialogFooter className="mt-4">
+                      <Button variant="outline" onClick={() => setCancelDialogOpen(false)}>Back</Button>
+                      <Button variant="destructive" onClick={() => { onCancel && onCancel(id, cancelReason); setCancelDialogOpen(false); setCancelReason(""); }} disabled={!cancelReason.trim()}>
+                        Cancel Booking
+                      </Button>
+                    </DialogFooter>
+                  </DialogContent>
+                </Dialog>
+                <Dialog open={rescheduleDialogOpen} onOpenChange={setRescheduleDialogOpen}>
+                  <DialogTrigger asChild>
+                    <Button variant="outline" className="flex-1">
+                      <Calendar className="mr-2 h-4 w-4" />
+                      Reschedule
+                    </Button>
+                  </DialogTrigger>
+                  <DialogContent>
+                    <DialogHeader>
+                      <DialogTitle>Reschedule Booking</DialogTitle>
+                      <DialogDescription>Pick a new date and time for this session.</DialogDescription>
+                    </DialogHeader>
+                    <input type="date" className="border rounded p-2 w-full mb-2" value={rescheduleDate} onChange={e => setRescheduleDate(e.target.value)} />
+                    <div className="flex gap-2">
+                      <input type="time" className="border rounded p-2 flex-1" value={rescheduleStart} onChange={e => setRescheduleStart(e.target.value)} />
+                      <input type="time" className="border rounded p-2 flex-1" value={rescheduleEnd} onChange={e => setRescheduleEnd(e.target.value)} />
+                    </div>
+                    <DialogFooter className="mt-4">
+                      <Button variant="outline" onClick={() => setRescheduleDialogOpen(false)}>Cancel</Button>
+                      <Button onClick={() => { onReschedule && onReschedule(id, rescheduleDate, rescheduleStart, rescheduleEnd); setRescheduleDialogOpen(false); }}>
+                        Reschedule
+                      </Button>
+                    </DialogFooter>
+                  </DialogContent>
+                </Dialog>
+              </div>
             </div>
           )}
         </CardFooter>
