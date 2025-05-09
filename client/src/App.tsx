@@ -133,6 +133,12 @@ function AppRoutes() {
         </AnimatedRoute>
       </ProtectedRoute>
       
+      <ProtectedRoute path="/admin/bookings">
+        <AnimatedRoute>
+          <AdminDashboard />
+        </AnimatedRoute>
+      </ProtectedRoute>
+      
       <Route>
         <AnimatedRoute>
           <NotFound />
