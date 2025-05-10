@@ -570,6 +570,40 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
   
+  app.get("/api/admin/bookings", async (req, res) => {
+    try {
+      // Only allow admins
+      if (!req.isAuthenticated() || req.user.role !== "admin") {
+        return res.status(403).json({ message: "Not authorized" });
+      }
+      const bookings = await storage.getAllBookings();
+      const bookingsWithDetails = await Promise.all(
+        bookings.map(async booking => {
+          const tutor = await storage.getUser(booking.tutorId);
+          const learner = await storage.getUser(booking.learnerId);
+          const course = await storage.getCourse(booking.courseId);
+          return {
+            ...booking,
+            tutor: tutor ? {
+              id: tutor.id,
+              fullName: tutor.fullName,
+              profilePicture: tutor.profilePicture
+            } : null,
+            learner: learner ? {
+              id: learner.id,
+              fullName: learner.fullName,
+              profilePicture: learner.profilePicture
+            } : null,
+            course: course || null
+          };
+        })
+      );
+      res.status(200).json(bookingsWithDetails);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to get all bookings" });
+    }
+  });
+  
   const httpServer = createServer(app);
   return httpServer;
 }

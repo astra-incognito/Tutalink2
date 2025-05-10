@@ -42,6 +42,7 @@ export interface IStorage {
   getBookingsByLearner(learnerId: number): Promise<Booking[]>;
   getBookingsByTutor(tutorId: number): Promise<Booking[]>;
   updateBookingStatus(id: number, status: string): Promise<Booking | undefined>;
+  getAllBookings(): Promise<Booking[]>;
   
   // Review methods
   createReview(review: InsertReview): Promise<Review>;
@@ -289,6 +290,10 @@ export class MemStorage implements IStorage {
     });
     
     return updatedBooking;
+  }
+  
+  async getAllBookings(): Promise<Booking[]> {
+    return Array.from(this.bookings.values());
   }
   
   // Review methods
