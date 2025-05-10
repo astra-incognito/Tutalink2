@@ -40,7 +40,7 @@ export default function AdminSettings() {
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-indigo-700 text-2xl">
               <Settings className="h-6 w-6 text-indigo-500" />
-              ⚙️ Settings
+              Settings
             </CardTitle>
             <CardDescription>
               Control platform-wide preferences
