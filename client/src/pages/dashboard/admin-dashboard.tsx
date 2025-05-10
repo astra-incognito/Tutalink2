@@ -236,6 +236,22 @@ export default function AdminDashboard() {
     return matchesQuery && matchesStatus && matchesDate && matchesTutor && matchesLearner;
   }) || [];
 
+  // Filter users based on search query
+  const filteredUsers = allUsers?.filter((user) => {
+    const matchesQuery =
+      searchQuery === "" ||
+      user.fullName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      user.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      user.username.toLowerCase().includes(searchQuery.toLowerCase());
+
+    const matchesStatus =
+      statusFilter === "all" ||
+      (statusFilter === "active" && user.isActive) ||
+      (statusFilter === "inactive" && !user.isActive);
+
+    return matchesQuery && matchesStatus;
+  });
+
   // Pagination logic
   const paginatedUsers = filteredUsers?.slice((page - 1) * usersPerPage, page * usersPerPage) || [];
   const totalPages = filteredUsers ? Math.ceil(filteredUsers.length / usersPerPage) : 1;
