@@ -22,6 +22,7 @@ import ManageCourses from "@/pages/dashboard/manage-courses";
 import AdminBookings from "@/pages/dashboard/admin-bookings";
 import AdminSettings from "@/pages/dashboard/admin-settings";
 import MyCourses from "@/pages/my-courses";
+import MyReviews from "@/pages/my-reviews";
 
 // Animation variants for page transitions
 const pageVariants = {
@@ -151,6 +152,12 @@ function AppRoutes() {
       <ProtectedRoute path="/courses">
         <AnimatedRoute>
           <MyCourses />
+        </AnimatedRoute>
+      </ProtectedRoute>
+      
+      <ProtectedRoute path="/reviews">
+        <AnimatedRoute>
+          <MyReviews />
         </AnimatedRoute>
       </ProtectedRoute>
       
