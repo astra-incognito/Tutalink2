@@ -3,10 +3,10 @@
 # Install dependencies
 yarn install
 
-# Generate Prisma Client
+# Generate Prisma client
 yarn prisma generate
 
-# Run migrations
+# Run migrations (for production, use migrate deploy)
 yarn prisma migrate deploy
 
 # Build TypeScript

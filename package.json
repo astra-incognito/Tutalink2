@@ -2,7 +2,8 @@
   "name": "rest-express",
   "private": true,
   "workspaces": [
-    "client"
+    "client",
+    "server"
   ],
   "version": "1.0.0",
   "type": "module",
