@@ -160,7 +160,9 @@ export default function AdminBookings() {
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="">All Tutors</SelectItem>
-                    {tutorOptions.map((t: string) => <SelectItem key={t} value={t}>{t}</SelectItem>)}
+                    {tutorOptions
+                      .filter(t => t && t.trim() !== "")
+                      .map((t: string) => <SelectItem key={t} value={t}>{t}</SelectItem>)}
                   </SelectContent>
                 </Select>
                 <Select value={learnerFilter} onValueChange={setLearnerFilter}>
@@ -169,7 +171,9 @@ export default function AdminBookings() {
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="">All Learners</SelectItem>
-                    {learnerOptions.map((l: string) => <SelectItem key={l} value={l}>{l}</SelectItem>)}
+                    {learnerOptions
+                      .filter(l => l && l.trim() !== "")
+                      .map((l: string) => <SelectItem key={l} value={l}>{l}</SelectItem>)}
                   </SelectContent>
                 </Select>
                 <Select value={statusFilter} onValueChange={setStatusFilter}>
