@@ -161,7 +161,7 @@ export default function AdminBookings() {
                   <SelectContent>
                     <SelectItem value="">All Tutors</SelectItem>
                     {tutorOptions
-                      .filter(t => t && t.trim() !== "")
+                      .filter(t => typeof t === 'string' && t.trim() !== "")
                       .map((t: string) => <SelectItem key={t} value={t}>{t}</SelectItem>)}
                   </SelectContent>
                 </Select>
@@ -172,7 +172,7 @@ export default function AdminBookings() {
                   <SelectContent>
                     <SelectItem value="">All Learners</SelectItem>
                     {learnerOptions
-                      .filter(l => l && l.trim() !== "")
+                      .filter(l => typeof l === 'string' && l.trim() !== "")
                       .map((l: string) => <SelectItem key={l} value={l}>{l}</SelectItem>)}
                   </SelectContent>
                 </Select>
