@@ -408,4 +408,13 @@ export class DatabaseStorage implements IStorage {
       .from(users)
       .where(inArray(users.id, tutorIds));
   }
+
+  async getAllBookings(): Promise<Booking[]> {
+    return await db.select().from(bookings);
+  }
+
+  async deleteUser(id: number): Promise<boolean> {
+    const result = await db.delete(users).where(eq(users.id, id)).returning();
+    return result.length > 0;
+  }
 }
