@@ -57,6 +57,8 @@ export default function AdminBookings() {
   const tutorOptions = allBookings ? Array.from(new Set(allBookings.map((b: BookingData) => b.tutor.fullName))) : [];
   const learnerOptions = allBookings ? Array.from(new Set(allBookings.map((b: BookingData) => b.learner.fullName))) : [];
 
+  console.log('tutorOptions', tutorOptions, 'learnerOptions', learnerOptions);
+
   // Admin booking actions
   const approveBookingMutation = useMutation({
     mutationFn: async (bookingId: number) => {
@@ -161,7 +163,9 @@ export default function AdminBookings() {
                   <SelectContent>
                     <SelectItem value="">All Tutors</SelectItem>
                     {tutorOptions
-                      .filter(t => typeof t === 'string' && t.trim() !== "")
+                      .filter(
+                        t => typeof t === 'string' && t.trim() !== '' && t !== null && t !== undefined
+                      )
                       .map((t: string) => <SelectItem key={t} value={t}>{t}</SelectItem>)}
                   </SelectContent>
                 </Select>
@@ -172,7 +176,9 @@ export default function AdminBookings() {
                   <SelectContent>
                     <SelectItem value="">All Learners</SelectItem>
                     {learnerOptions
-                      .filter(l => typeof l === 'string' && l.trim() !== "")
+                      .filter(
+                        l => typeof l === 'string' && l.trim() !== '' && l !== null && l !== undefined
+                      )
                       .map((l: string) => <SelectItem key={l} value={l}>{l}</SelectItem>)}
                   </SelectContent>
                 </Select>
