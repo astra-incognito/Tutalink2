@@ -1,7 +1,8 @@
 import React from "react";
 import { SidebarNav } from "@/components/layout/sidebar-nav";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
-import { Settings, Palette, CreditCard, CalendarCheck2, Bell, Users } from "lucide-react";
+import { Settings, Palette, CreditCard, CalendarCheck2, Bell, Users, Star } from "lucide-react";
+import Link from "next/link";
 
 const settingsSections = [
   {
@@ -28,6 +29,12 @@ const settingsSections = [
     title: "Admin Roles",
     icon: <Users className="h-5 w-5 text-indigo-500" />,
     description: "Add or remove other admin users and manage permissions.",
+  },
+  {
+    title: "Review Management",
+    icon: <Star className="h-5 w-5 text-indigo-500" />,
+    description: "View and manage all learner reviews about tutors.",
+    link: "/dashboard/admin/reviews"
   },
 ];
 
@@ -56,9 +63,15 @@ export default function AdminSettings() {
               </CardHeader>
               <CardContent className="text-gray-600 pb-4">
                 <p className="mb-2">{section.description}</p>
-                <div className="bg-indigo-50 rounded p-3 text-indigo-400 text-sm text-center">
-                  Coming soon: {section.title} settings form
-                </div>
+                {section.link ? (
+                  <Link href={section.link} className="inline-block rounded bg-indigo-100 px-4 py-2 text-indigo-700 font-medium hover:bg-indigo-200 transition">
+                    Go to Reviews
+                  </Link>
+                ) : (
+                  <div className="bg-indigo-50 rounded p-3 text-indigo-400 text-sm text-center">
+                    Coming soon: {section.title} settings form
+                  </div>
+                )}
               </CardContent>
             </Card>
           ))}
