@@ -1,0 +1,82 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            Int      @id @default(autoincrement())
+  email         String   @unique
+  password      String
+  fullName      String
+  role          String   @default("learner")
+  profilePicture String?
+  bio          String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  // Relations
+  tutorReviews   Review[] @relation("TutorReviews")
+  learnerReviews Review[] @relation("LearnerReviews")
+  sessionsAsTutor Session[] @relation("TutorSessions")
+  sessionsAsLearner Session[] @relation("LearnerSessions")
+}
+
+model Session {
+  id        Int      @id @default(autoincrement())
+  date      DateTime
+  status    String   @default("upcoming")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  tutor   User   @relation("TutorSessions", fields: [tutorId], references: [id])
+  tutorId Int
+  learner User   @relation("LearnerSessions", fields: [learnerId], references: [id])
+  learnerId Int
+  course  Course? @relation(fields: [courseId], references: [id])
+  courseId Int?
+  review  Review?
+
+  @@index([tutorId])
+  @@index([learnerId])
+  @@index([courseId])
+}
+
+model Course {
+  id          Int      @id @default(autoincrement())
+  name        String
+  description String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relations
+  sessions Session[]
+}
+
+model Review {
+  id        Int      @id @default(autoincrement())
+  rating    Int
+  comment   String
+  reply     String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relationships
+  tutor   User   @relation("TutorReviews", fields: [tutorId], references: [id])
+  tutorId Int
+  learner User   @relation("LearnerReviews", fields: [learnerId], references: [id])
+  learnerId Int
+  session Session @relation(fields: [sessionId], references: [id])
+  sessionId Int
+
+  @@index([tutorId])
+  @@index([learnerId])
+  @@index([sessionId])
+} 
