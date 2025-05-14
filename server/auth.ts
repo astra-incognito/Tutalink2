@@ -31,9 +31,13 @@ async function comparePasswords(supplied: string, stored: string) {
       console.error("Invalid password format, expected hash.salt");
       return false;
     }
-    const hashedBuf = Buffer.from(hashed, "hex");
+    
+    // Generate hash from the supplied password
     const suppliedBuf = (await scryptAsync(supplied, salt, 64)) as Buffer;
-    return timingSafeEqual(hashedBuf, suppliedBuf);
+    const suppliedHash = suppliedBuf.toString("hex");
+    
+    // Compare the hashed values directly as strings instead of using timingSafeEqual on buffers
+    return suppliedHash === hashed;
   } catch (error) {
     console.error("Error comparing passwords:", error);
     return false;

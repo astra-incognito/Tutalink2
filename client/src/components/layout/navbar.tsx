@@ -195,13 +195,22 @@ export function Navbar() {
             )}
             <div className="flex items-center pl-3 pr-4 py-2">
               <span className="text-gray-600 dark:text-gray-300 mr-2">Theme:</span>
-              <Button 
-                variant="ghost" 
-                size="sm" 
-                onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-              >
-                {theme === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
-              </Button>
+              <div className="flex gap-2">
+                <Button 
+                  variant={theme === "light" ? "default" : "ghost"}
+                  size="sm" 
+                  onClick={() => setTheme("light")}
+                >
+                  <Sun className="h-4 w-4 mr-1" /> Light
+                </Button>
+                <Button 
+                  variant={theme === "dark" ? "default" : "ghost"}
+                  size="sm" 
+                  onClick={() => setTheme("dark")}
+                >
+                  <Moon className="h-4 w-4 mr-1" /> Dark
+                </Button>
+              </div>
             </div>
           </div>
         </div>
