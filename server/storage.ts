@@ -96,9 +96,9 @@ export class MemStorage implements IStorage {
     // Create a default admin user
     this.users.set(1, {
       id: 1,
-      username: "admin",
+      username: "admin123",
       email: "admin@tutalink.com",
-      password: "dd12dff51e73ab3bc5230c6e78fbdd4f4c493f6cc5a7a127e8b0a5ade1a06aabf59ce7da9bfd2792027e5e43a9f9cd4bf3c2f6e54ef871c4c713e7662bf362df.b1a5ab3849e07ec2b0ecc9a3de50829d", // admin123
+      password: "56629b9eca8975f5ef3449d7127e9a7178097252c28e25fb6a5eca0cb11234c9.916f65fa3bf7a2349ae9bb320bd76481", // password123
       fullName: "Admin User",
       role: "admin",
       department: null,
