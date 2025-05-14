@@ -1,35 +1,34 @@
-import { useEffect, useState } from "react";
-import { Redirect, useLocation } from "wouter";
-import { useQuery } from "@tanstack/react-query";
-import { getQueryFn } from "@/lib/queryClient";
+import { useState } from "react";
+import { Redirect } from "wouter";
 import { AuthForms } from "@/components/auth/auth-forms";
 import { Navbar } from "@/components/layout/navbar";
 import { Footer } from "@/components/layout/footer";
-import { Loader2 } from "lucide-react";
+import { apiRequest } from "@/lib/queryClient";
 
 export default function AuthPage() {
-  const [, setLocation] = useLocation();
-  const [isInitialized, setIsInitialized] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   
-  // Directly check if user is authenticated
-  const { data: user, isLoading } = useQuery({
-    queryKey: ["/api/user"],
-    queryFn: getQueryFn({ on401: "returnNull" }),
-    onSuccess: () => setIsInitialized(true),
-    onError: () => setIsInitialized(true)
+  // Check if the user is logged in
+  const checkLoginStatus = async () => {
+    try {
+      const response = await apiRequest("GET", "/api/user");
+      if (response.ok) {
+        setIsLoggedIn(true);
+      }
+    } catch (error) {
+      // User is not logged in, do nothing
+    }
+  };
+  
+  // Call the login check when component mounts
+  useState(() => {
+    checkLoginStatus();
+    // This is equivalent to useEffect with empty deps array
+    // but we're using useState trick to avoid dependency issues
   });
 
-  // Show loading state during initialization
-  if (!isInitialized) {
-    return (
-      <div className="flex items-center justify-center min-h-screen">
-        <Loader2 className="h-8 w-8 animate-spin text-primary" />
-      </div>
-    );
-  }
-
   // Redirect if already logged in
-  if (user) {
+  if (isLoggedIn) {
     return <Redirect to="/dashboard" />;
   }
 
