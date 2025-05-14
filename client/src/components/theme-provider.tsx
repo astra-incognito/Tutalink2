@@ -34,6 +34,10 @@ export function ThemeProvider({
   useEffect(() => {
     const root = window.document.documentElement
 
+    // Store the current theme in localStorage
+    localStorage.setItem(storageKey, theme)
+    
+    // Remove both theme classes before applying the new one
     root.classList.remove("light", "dark")
 
     if (theme === "system") {
@@ -47,13 +51,12 @@ export function ThemeProvider({
     }
 
     root.classList.add(theme)
-  }, [theme])
+  }, [theme, storageKey])
 
   const value = {
     theme,
-    setTheme: (theme: Theme) => {
-      localStorage.setItem(storageKey, theme)
-      setTheme(theme)
+    setTheme: (newTheme: Theme) => {
+      setTheme(newTheme)
     },
   }
 
