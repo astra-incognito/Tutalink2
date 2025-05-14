@@ -111,18 +111,18 @@ export class MemStorage implements IStorage {
       transcriptPath: null
     });
     
-    // Initialize default Stripe system configs
+    // Initialize Stripe system configs with environment variables
     this.systemConfigs.set("STRIPE_SECRET_KEY", {
       id: this.currentConfigId++,
       key: "STRIPE_SECRET_KEY",
-      value: "",
+      value: process.env.STRIPE_SECRET_KEY || "",
       description: "Stripe Secret Key for payment processing"
     });
     
     this.systemConfigs.set("VITE_STRIPE_PUBLIC_KEY", {
       id: this.currentConfigId++,
       key: "VITE_STRIPE_PUBLIC_KEY",
-      value: "",
+      value: process.env.VITE_STRIPE_PUBLIC_KEY || "",
       description: "Stripe Public Key for client-side payment forms"
     });
 
