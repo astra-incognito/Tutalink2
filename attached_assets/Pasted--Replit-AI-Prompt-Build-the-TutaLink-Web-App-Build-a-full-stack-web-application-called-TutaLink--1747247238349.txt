@@ -1,0 +1,107 @@
+🧠 Replit AI Prompt: Build the TutaLink Web App
+
+Build a full-stack web application called TutaLink, designed for KNUST students. It allows brilliant students to become tutors and earn money by teaching their peers in person. The app should have the following features:
+
+🌐 General Features:
+
+Responsive design for both desktop and mobile.
+
+Beautiful UI with light/dark mode toggle.
+
+Elegant, modern design with high-quality UI/UX.
+
+Footer with dynamic content (editable by admin).
+
+👥 User Roles:
+
+1. Learner:
+
+Can sign up with email/username and password.
+
+Can search tutors by course, availability, or rating.
+
+Can book sessions and pay tutors (integrate with Stripe).
+
+Can write reviews for tutors.
+
+Can report tutors (shown on admin dashboard).
+
+2. Tutor:
+
+Must first register as a learner.
+
+Can apply to become a tutor via a form.
+
+Must upload academic transcript (PDF or image).
+
+Must have a minimum CWA of 3.4 (validated by admin).
+
+Can add/edit courses and availability.
+
+Can respond to reviews left by learners.
+
+3. Admin:
+
+Login credentials: admin123 / password123 (seeded).
+
+Full control over platform:
+
+Approve or reject learner and tutor signups.
+
+Promote/demote users to tutor or admin.
+
+Delete users or reset passwords.
+
+View statistics dashboard (bookings, users, revenue, etc.).
+
+See tutor reports from learners.
+
+Send notifications to all users.
+
+Update footer information from the admin panel.
+
+payment integration base, that admin can update the paymet apis from strip, the commisions etc
+
+can add programs,repective departmets, and colleges according to the knust system to the system, that, the tutors can select from when creating courses they will teach 
+
+📊 Stats & Real-Time Functionality:
+
+Real-time updates on user activity and stats.
+
+Admin dashboard shows total users, tutors, learners, reports, earnings, and pending approvals.
+
+Use websockets or polling for live updates if possible.
+
+🔐 Authentication:
+
+Use JWT-based authentication or NextAuth (if using Next.js).
+
+Role-based access: learner, tutor, admin.
+
+🧠 Logic & Algorithms:
+
+Course recommendation system for learners based on search history or similar learners.
+
+Availability matching algorithm between tutors and learners.
+
+Detect low-rated tutors and notify admin.
+
+Auto-flag duplicate transcripts or tutor applications.
+
+🛠️ Tech Stack Suggestion:
+
+Frontend: React + TailwindCSS or Next.js
+
+Backend: Node.js + Express or Next.js API Routes
+
+Database: PostgreSQL with Prisma ORM
+
+Auth: JWT or NextAuth
+
+Storage: Cloudinary or Firebase for transcript uploads
+
+Real-time: Socket.IO (optional)
+
+Payment: Stripe integration
+
+Deployment: Replit, Render, or Vercel
