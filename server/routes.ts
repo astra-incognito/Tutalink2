@@ -396,6 +396,34 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Debug endpoints - REMOVE IN PRODUCTION
+  app.get("/api/debug/users", (req, res) => {
+    const users = storage.getAllUsers().map(user => ({
+      id: user.id,
+      username: user.username,
+      email: user.email,
+      role: user.role,
+      passwordType: typeof user.password,
+      passwordLength: user.password ? user.password.length : 0
+    }));
+    res.json(users);
+  });
+  
+  // Debug endpoint to verify admin user
+  app.get("/api/debug/admin", (req, res) => {
+    const adminUser = storage.getUserByUsername("admin123");
+    if (adminUser) {
+      const { password, ...userWithoutPassword } = adminUser;
+      res.json({
+        user: userWithoutPassword,
+        passwordLength: password ? password.length : 0,
+        passwordType: typeof password
+      });
+    } else {
+      res.status(404).json({ message: "Admin user not found" });
+    }
+  });
+  
   // Create the HTTP server
   const httpServer = createServer(app);
 
