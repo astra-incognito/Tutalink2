@@ -1,5 +1,5 @@
-// Admin Manage Programs/Departments/Colleges Page Stub
 import * as React from "react";
+// Admin Manage Programs/Departments/Colleges Page Stub
 import { Navbar } from "@/components/layout/navbar";
 import { Sidebar } from "@/components/layout/sidebar";
 import { Footer } from "@/components/layout/footer";
