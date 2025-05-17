@@ -58,7 +58,7 @@ const COLORS = ["#4f46e5", "#eab308", "#ef4444"];
 
 export default function AdminDashboard() {
   // Fetch dashboard data from API
-  const { data: dashboardData } = useQuery({
+  const { data: dashboardData } = useQuery<any>({
     queryKey: ["/api/admin/dashboard"],
     enabled: false, // Disabled for demo
   });
@@ -80,7 +80,8 @@ export default function AdminDashboard() {
     ],
   };
 
-  const data = dashboardData || mockDashboardData;
+  // Always use mock data if dashboardData is undefined or empty
+  const data = dashboardData && Object.keys(dashboardData).length > 0 ? dashboardData : mockDashboardData;
 
   // Format timestamp to human-readable format
   const formatTimestamp = (timestamp: string) => {
@@ -303,7 +304,7 @@ export default function AdminDashboard() {
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-4">
-                    {data.recentActivities.map((activity) => (
+                    {data.recentActivities.map((activity: any) => (
                       <div key={activity.id} className="flex items-start">
                         <div className="flex-shrink-0">
                           <div className="h-8 w-8 rounded-full bg-gray-100 dark:bg-gray-700 flex items-center justify-center">
