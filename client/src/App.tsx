@@ -13,6 +13,9 @@ import AdminDashboard from "@/pages/admin/admin-dashboard";
 import ManageUsers from "@/pages/admin/manage-users";
 import ManageTutors from "@/pages/admin/manage-tutors";
 import PaymentSettingsPage from "@/pages/admin/payment-settings";
+import SupportPage from "@/pages/support-page";
+import PaymentsPage from "@/pages/payments-page";
+import ReviewsPage from "@/pages/reviews-page";
 import { ProtectedRoute } from "./lib/protected-route";
 import { useQuery } from "@tanstack/react-query";
 import { Loader2 } from "lucide-react";
@@ -33,6 +36,10 @@ function AuthenticatedApp() {
       <ProtectedRoute path="/admin/users" component={ManageUsers} roles={["admin"]} />
       <ProtectedRoute path="/admin/tutors" component={ManageTutors} roles={["admin"]} />
       <ProtectedRoute path="/admin/payment-settings" component={PaymentSettingsPage} roles={["admin"]} />
+      <ProtectedRoute path="/payments" component={PaymentsPage} />
+      <ProtectedRoute path="/reviews" component={ReviewsPage} />
+      <ProtectedRoute path="/support" component={SupportPage} />
+      <ProtectedRoute path="/admin/dashboard" component={AdminDashboard} roles={["admin"]} />
       <Route component={NotFound} />
     </Switch>
   );
