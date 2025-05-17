@@ -1,3 +1,4 @@
+import * as React from "react";
 import { Link, useLocation } from "wouter";
 import { useAuth } from "@/hooks/use-auth";
 import {
@@ -12,7 +13,6 @@ import {
   LogOut
 } from "lucide-react";
 import { cn } from "@/lib/utils";
-import React from "react";
 
 type SidebarLinkProps = {
   href: string;

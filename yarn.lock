@@ -1951,6 +1951,13 @@
     "@types/node" "*"
     "@types/send" "*"
 
+"@types/wouter@^2.2.0":
+  version "2.2.0"
+  resolved "https://registry.yarnpkg.com/@types/wouter/-/wouter-2.2.0.tgz#373c275c10493be001edd46fc0e8b16d3bca4347"
+  integrity sha512-TnMGR0eExgD5Pj11cp9kU26HommanlH1zDwBqbCg7tbQ01ystc1tCVjffZUrzXOrVfWNIf1FHSR4zHcUG0MHZw==
+  dependencies:
+    wouter "*"
+
 "@types/ws@^8.5.13":
   version "8.18.1"
   resolved "https://registry.yarnpkg.com/@types/ws/-/ws-8.18.1.tgz#48464e4bf2ddfd17db13d845467f6070ffea4aa9"
@@ -4002,6 +4009,7 @@ statuses@2.0.1:
   integrity sha512-RwNA9Z/7PrK06rYLIzFMlaF+l73iwpzsqRIFgbMLbTcLD6cOao82TaWefPXQvB2fOC4AjuYSEndS7N/mTCbkdQ==
 
 "string-width-cjs@npm:string-width@^4.2.0", string-width@^4.1.0:
+  name string-width-cjs
   version "4.2.3"
   resolved "https://registry.yarnpkg.com/string-width/-/string-width-4.2.3.tgz#269c7117d27b05ad2e536830a8ec895ef9c6d010"
   integrity sha512-wKyQRQpjJ0sIp62ErSZdGsjMJWsap5oRNihHhu6G7JVO/9jIB6UyevL+tXuOqrng8j/cxKTWyWUwvSTriiZz/g==
@@ -4020,6 +4028,7 @@ string-width@^5.0.1, string-width@^5.1.2:
     strip-ansi "^7.0.1"
 
 "strip-ansi-cjs@npm:strip-ansi@^6.0.1", strip-ansi@^6.0.0, strip-ansi@^6.0.1:
+  name strip-ansi-cjs
   version "6.0.1"
   resolved "https://registry.yarnpkg.com/strip-ansi/-/strip-ansi-6.0.1.tgz#9e26c63d30f53443e9489495b2105d37b67a85d9"
   integrity sha512-Y38VPSHcqkFrCpFnQ9vuSXmquuv5oXOKpGeT6aGrr3o3Gc9AlVa6JBfUSOCnbxGGZF+/0ooI7KrPuUSztUdU5A==
@@ -4304,7 +4313,7 @@ which@^4.0.0:
   dependencies:
     isexe "^3.1.1"
 
-wouter@^3.7.0:
+wouter@*, wouter@^3.7.0:
   version "3.7.0"
   resolved "https://registry.yarnpkg.com/wouter/-/wouter-3.7.0.tgz#9c7a320a23daf62150717724e41e029f3efb8c20"
   integrity sha512-ElkqESy10WgRRbdd22uQkSSO6LmG6vxI50pxPKry2TLebbdXvgtp7rJ48KafjUvsKcQQmIewxgRCGixPfk58tw==

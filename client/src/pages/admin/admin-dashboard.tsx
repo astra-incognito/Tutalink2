@@ -1,3 +1,4 @@
+import * as React from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Navbar } from "@/components/layout/navbar";
 import { Sidebar } from "@/components/layout/sidebar";
