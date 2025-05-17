@@ -12,7 +12,8 @@ export default function NotFound() {
           </div>
 
           <p className="mt-4 text-sm text-gray-600">
-            Did you forget to add the page to the router?
+            The page you are looking for does not exist or has been moved.<br />
+            <a href="/" className="text-primary underline hover:text-primary/80 transition">Go back to Home</a>
           </p>
         </CardContent>
       </Card>
